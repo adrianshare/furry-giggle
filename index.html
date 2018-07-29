@@ -1,22 +1,34 @@
 <html>
 <head> 
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 
 </head>
 <body>
 
-<button onclick="buildCasual()">1</button>
-<button onclick="buildMedium()">2</button>
-<button onclick="buildSuper()">3</button>
-<button onclick="buildAll()" >4</button>
-<button>Next</button>
+<button onclick="viewAbout()">About the Visualization</button>
+<div id="navigaion">
+	<button onclick="buildCasual()">1</button>
+	<button onclick="buildMedium()">2</button>
+	<button onclick="buildSuper()">3</button>
+	<button onclick="buildAll()" >4</button>	
+<div>
 
-<div id="visual"></div>
+<div id="visual" ></div>
+<div id="captainParams" style="visibility: hidden">
+	<form id="captainsFRM">
+		<input type="radio" name="captainRDO" value="William Shatner">William Shatner
+		<input type="radio" name="captainRDO" value="Chris Pine">Chris Pine
+		<input type="radio" name="captainRDO" value="Patrick Stewart">Patrick Stewart
+	</form>
+</div>
+
+<div id="content"></div>
+	
+
 
 <script>
 
-var data = [];
+
 
 var casualCohort = [{title:'2009',rating: 3.931},{title: '2016', rating: 3.613}, {title: '1982', rating: 3.821},
 			{title:'1984',rating: 3.296},{title:'2013',rating: 3.746},{title:'1986',rating: 3.577},{title:'1989',rating: 2.859},
@@ -38,54 +50,67 @@ var superCohort = [{title:'2009',rating: 3.984},{title: '2016', rating: 3.496}, 
 
 			
 var allCohort = [
-				{title:'2009',casuals: 3.931 ,mediums: 3.854, supers: 3.984},
-				{title:'2016',casuals: 3.613 ,mediums: 3.574, supers: 3.496}, 
-				{title:'1982',casuals: 3.821 ,mediums: 3.472, supers: 3.987},
-				{title:'1984',casuals: 3.296, mediums: 3.367, supers: 3.059},
-				{title:'2013',casuals: 3.746, mediums: 3.788, supers: 3.644},
-				{title:'1986',casuals: 3.577, mediums: 3.240, supers: 3.700},
-				{title:'1989',casuals: 2.859, mediums: 2.979, supers: 2.787},
-				{title:'1991',casuals: 3.341, mediums: 3.091, supers: 3.512},
-				{title:'1996',casuals: 3.691, mediums: 3.620, supers: 3.806},
-				{title:'1994',casuals: 3.297, mediums: 3.356, supers: 3.333},
-				{title:'1998',casuals: 3.259, mediums: 3.135, supers: 3.216 },
-				{title:'2002',casuals: 3.144, mediums: 3.100, supers: 3.153},
-				{title:'1979',casuals: 3.115, mediums: 3.030, supers: 3.141}
+				{title:'2009',casuals: 3.931 ,mediums: 3.854, supers: 3.984, captain: 'Chris Pine'},
+				{title:'2016',casuals: 3.613 ,mediums: 3.574, supers: 3.496, captain: 'Chris Pine'}, 
+				{title:'1982',casuals: 3.821 ,mediums: 3.472, supers: 3.987, captain: 'William Shatner'},
+				{title:'1984',casuals: 3.296, mediums: 3.367, supers: 3.059, captain: 'William Shatner'},
+				{title:'2013',casuals: 3.746, mediums: 3.788, supers: 3.644, captain: 'Chris Pine'},
+				{title:'1986',casuals: 3.577, mediums: 3.240, supers: 3.700, captain: 'William Shatner'},
+				{title:'1989',casuals: 2.859, mediums: 2.979, supers: 2.787, captain: 'William Shatner'},
+				{title:'1991',casuals: 3.341, mediums: 3.091, supers: 3.512, captain: 'William Shatner'},
+				{title:'1996',casuals: 3.691, mediums: 3.620, supers: 3.806, captain: 'Patrick Stewart'},
+				{title:'1994',casuals: 3.297, mediums: 3.356, supers: 3.333, captain: 'Patrick Stewart'},
+				{title:'1998',casuals: 3.259, mediums: 3.135, supers: 3.216, captain: 'Patrick Stewart'},
+				{title:'2002',casuals: 3.144, mediums: 3.100, supers: 3.153, captain: 'Patrick Stewart'},
+				{title:'1979',casuals: 3.115, mediums: 3.030, supers: 3.141, captain: 'William Shatner'}
 			]
 
+/*
 var cohortNames = d3.keys(allCohort[0]).filter(function(key) {
-    return key !== "title";
+    return key!== "title" ;
 });
+*/
+var data = allCohort;
+var cohortNames = ['casuals', 'mediums', 'supers']
 
 allCohort.forEach(function(d) {
     d.cohortRatings = cohortNames.map(function(name) {
-        return {
-            name: name,
-            value: d[name]
-        };
+			return {
+				name: name,
+				value: d[name]
+			};
     });
 });
 
-//console.log(allCohort)
+var currentSlide = 'open';
+
 function buildCasual(){
-	d3.select("svg").remove();
+	cleanUp()
 	data = casualCohort;
-	buildVisual(casualCohort, "#4c8aed");	
+	buildVisual(allCohort, 'casuals' ,"#4c8aed");
+	currentSlide = 'casual';
+	d3.select("#content").html(' Casual viewers have seen 1-4 movies.');
 }			
 function buildMedium(){
-	d3.select("svg").remove();
+	cleanUp()
     data = mediumCohort;
-	buildVisual(mediumCohort, "#ffa755");	
+	buildVisual(allCohort, 'mediums', "#ffa755");
+	currentSlide = 'medium';
+	d3.select("#content").html(' Medium viewers have seen 5-8 movies.');
+	
 }
 function buildSuper(){
-	d3.select("svg").remove();
+	cleanUp()
     data = superCohort;
-	buildVisual(superCohort, "#9fcc6f");	
+	buildVisual(allCohort, 'supers', "#9fcc6f");
+	currentSlide = 'super';	
+	d3.select("#content").html('Super viewers have seen 9-13 movies.');
 }
 function buildAll(){
-	d3.select("svg").remove();
+	cleanUp()
     data = allCohort;
-	buildGroupVisual(allCohort);	
+	buildGroupVisual(allCohort);
+	currentSlide = 'final';		
 }
 
 
@@ -93,7 +118,16 @@ var indent = 30;
 var w = 750;
 var h = 400;
 
-function buildVisual( data , color ){
+
+
+var tip = d3.select("body").append("div")
+				.style("position", "absolute")
+				.style("visibility", "hidden")
+				.style("border-style", "solid")
+				.style("border-width", "thin")
+				.style("background-color", "white")
+
+function buildVisual( data ,cohort ,color , captain ){
 	var root = this;
 	var xScale = d3.scaleBand()
 					.domain(data.map(function(d) { return d.title; }))
@@ -110,28 +144,106 @@ function buildVisual( data , color ){
 				
 	var svg = d3.select("#visual").append("svg").attr("width", w).attr("height", h)
 
-	svg.selectAll("rect").data(data).enter().append("rect")
+	var bars = svg.selectAll("rect").data(data).enter()
+	
+
+	
+	/*
+	var mainColor = "grey";
+	if (!captain){
+		mainColor = color
+	}
+	*/
+	
+	//grey bars
+	bars.append("rect")
 		.attr("width", 40)
-		.attr("height", function(d) {return  (h - indent) - yScale(d.rating);})
+		.attr("height", function(d) {return  (h - indent) - yScale(d[cohort]);})
 		.attr("x", function(d,i) {return xScale(d.title);})
-		.attr("y", function(d) {return yScale(d.rating);} )
-		.style("fill", color)
+		.attr("y", function(d) {return yScale(d[cohort]);} )
+		.style("fill", "grey")
+		.style("opacity", 0.2)
+
+	
+	//color bars
+	bars.append("rect").filter(function(d) { 			
+				if (captain){
+					return d.captain == captain;  
+				}else{
+					return true;
+				}	  
+			})
+		.attr("width", 40)
+		.attr("height", function(d) {return  (h - indent) - yScale(d[cohort]);})
+		.attr("x", function(d,i) {return xScale(d.title);})
+		.attr("y", function(d) {return yScale(d[cohort]);} )
+		.style("fill", color )
+		.on("mouseover", function(d) 
+						{	
+						return tip.style("visibility", "visible")
+								.html('<span>Title: Star Trek '+ d.title +
+								'</span><br><span>Rating: '+ d[cohort]  +
+								'</span><br><span>Captain: '+ d.captain +'</span>' );	
+						
+						})
+		.on("mousemove", function(){return tip.style("top", (d3.event.pageY-35)+"px").style("left",(d3.event.pageX+10)+"px");})
+		.on("mouseout", function(){return tip.style("visibility", "hidden");});
+
 
 
 	svg.selectAll("text").data(data).enter().append("text")
-		.text(function(d){ return root.highlight(d.rating);})
+		.text(function(d){ return root.highlight(d[cohort]);})
 		.attr("x", function(d,i){return xScale(d.title); })
-		.attr("y", function(d) {return  yScale(d.rating);})
+		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
+		.style("fill", "black")
+		
+	//tip bar
+	bars.append("rect")
+		.attr("width", 150)
+		.attr("height", 3)
+		.attr("x", function(d,i){return xScale(d.title); })
+		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
+		.attr("fill", "black")
+		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})	
+	
+	//tip line
+	var lines = svg.selectAll("line").data(data).enter()
+	
+	lines.append("line")          
+		.style("stroke", "black")
+		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})		
+		.attr("x1", function(d,i){return xScale(d.title);})     
+		.attr("y1",  function(d) {return  yScale(d[cohort]) - 80 ;})     
+		.attr("x2", function(d,i){return xScale(d.title) + 20;})    
+		.attr("y2",  function(d) {return  yScale(d[cohort]) + 10 ;});
+		
+	//tip dots	
+	var circles = svg.selectAll("circle").data(data).enter()
+	
+	circles.append("circle")        
+		.style("stroke", "black")	
+		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})	
+		.attr("cx", function(d,i){return xScale(d.title) + 20;})     
+		.attr("cy",  function(d) {return  yScale(d[cohort]) + 10  ;})     
+		.attr("r",  8)
+		   
 
-
+	
 	svg.append("g").call(yAxis)
 		.attr("transform", "translate("+ indent +", 0)")
 	svg.append("g").call(xAxis)
 		.attr("transform", "translate(0, "+ (h - indent) +")")
+		//.selectAll("text")
+		//.attr("y", 0)
+		//.attr("x", 9)
+		//.attr("dy", ".5em")
+		//.attr("transform", "rotate(-90)")
+		//.style("text-anchor", "start");
+		
 	
 }
 
-function buildGroupVisual( data ){
+function buildGroupVisual( data , captain ){
 	var root = this;					
 	var yScale = d3.scaleLinear()
 					.domain([0,4])
@@ -151,18 +263,47 @@ function buildGroupVisual( data ){
 					.range(["#4c8aed", "#ffa755", "#9fcc6f"]);
 				
 	var svg = d3.select("#visual").append("svg").attr("width", w).attr("height", h);
-
+	
+	//fill grey
 	svg.append("g").selectAll("g").data(data).enter().append("g")
 		.attr("transform", function(d) { return "translate(" + x0(d.title) + ",0)"; })
+	
 		.selectAll("rect").data(function(d) {return d.cohortRatings;}).enter().append("rect")
 		.attr("width", x1.bandwidth())
 		.attr("height", function(d) {return  (h - indent) - yScale(d.value);})
 		.attr("x", function(d,i) {return x1(d.name);})
 		.attr("y", function(d) {return yScale(d.value);} )
-		.style("fill", function(d) { 
-			return color(d.name);
-			
-		});
+		.style("fill", "grey")
+		.style("opacity", 0.2)
+
+
+	//fill colors
+	svg.append("g").selectAll("g").data(data).enter().append("g")
+		.filter(function(d) { 
+			if (captain){
+				return d.captain == captain;  
+			}else{
+				return true;
+			}	
+		})
+		.attr("transform", function(d) { return "translate(" + x0(d.title) + ",0)"; })
+		.on("mouseover", function(d) 
+						{	
+						return tip.style("visibility", "visible")
+								.html('<span>Title: Star Trek '+ d.title +
+								'</span><br><span>Casuals: '+ d['casuals'] +
+								'</span><br><span>Medium: '+ d['mediums'] +
+								'</span><br><span>Supers: '+ d['supers'] +
+								'</span><br><span>Captain: '+ d.captain +'</span>' );	
+						})
+		.on("mousemove", function(){return tip.style("top", (d3.event.pageY-35)+"px").style("left",(d3.event.pageX+10)+"px");})
+		.on("mouseout", function(){return tip.style("visibility", "hidden");})
+		.selectAll("rect").data(function(d) {return d.cohortRatings;}).enter().append("rect")
+		.attr("width", x1.bandwidth())
+		.attr("height", function(d) {return  (h - indent) - yScale(d.value);})
+		.attr("x", function(d,i) {return x1(d.name);})
+		.attr("y", function(d) {return yScale(d.value);} )
+		.style("fill", function(d) { return color(d.name);});
 /*
 	svg.selectAll("text").data(data).enter().append("text")
 		.text(function(d){ return root.highlight(d.rating);})
@@ -174,8 +315,24 @@ function buildGroupVisual( data ){
 		.attr("transform", "translate("+ indent +", 0)")
 	svg.append("g").call(xAxis)
 		.attr("transform", "translate(0, "+ (h - indent) +")")
+		
+	var cohortLegend = svg.append("g").selectAll("g").data(cohortNames).enter()
+					.append("g")
+					.attr("transform", function(d, i) { return "translate(0," + i * 15 + ")"; });	
+	
+	cohortLegend.append("rect")
+			.attr('width', 15)
+			.attr('height', 15)
+			.attr('x', w - 80)
+			.style('fill',function(d){return color(d)} )
+	cohortLegend.append("text")
+			.attr('x', w-60)
+			.attr('y', 10)
+			.text(function(d){return d})
+		
 	
 }
+
 
 
 
@@ -184,16 +341,89 @@ function highlight(rating){
 	var worst = d3.min(data, function(d) { return d.rating;}) ;
 	 
 	if (rating == best ){
-		return "Best"
+		return  "Best" 
 	}else if (rating == worst){
 		return "Worst"
 	}
 }
 
+function fillOpacity(rating){
+	var best = d3.max(data, function(d) { return d.rating;}) ;
+	var worst = d3.min(data, function(d) { return d.rating;}) ;
+	 
+	if (rating == best ){
+		return  0.5 
+	}else if (rating == worst){
+		return 0.5
+	}else{
+		return 0
+	}
+}
+
+function captainFilter(){
+	var captainName = d3.select('input[name="captainRDO"]:checked').node().value
+	d3.select("svg").remove();
+	switch(currentSlide) {
+		case 'casual':
+			buildVisual(allCohort, 'casuals' ,"#4c8aed", captainName);
+			break;
+		case 'medium':
+			buildVisual(allCohort, 'mediums', "#ffa755", captainName);
+			break;
+		case 'super':
+			buildVisual(allCohort, 'supers', "#9fcc6f", captainName);
+			break;
+		case 'final':
+			buildGroupVisual(allCohort, captainName);
+			break;
+		default:
+			buildVisual(allCohort, 'casuals' ,"#4c8aed", captainName);
+	}
+}
+
+
+
+var captainListener = d3.select("#captainsFRM")
+						.on("change", captainFilter)
+
+
+function cleanUp(){
+	d3.select("svg").remove();
+	if (d3.select('input[name="captainRDO"]:checked').node()){
+		d3.select('input[name="captainRDO"]:checked').node().checked = false;
+	}
+	d3.select("#captainParams").style('visibility', 'visible');
+	d3.select("#content").html('');
+	d3.select("#about").style('visibility', 'hidden');
+}
+
+function viewAbout(){
+	d3.select("svg").remove();
+	d3.select("#captainParams").style('visibility', 'hidden');
+	d3.select("#content").html('');
+	d3.select("#about").style('visibility', 'visible');
+}
 
 
 
 
 </script>
+
+<div id ="about" >
+<h2>About the Visualization:</h2>
+<p>
+The main hybrid structured followed in this visual presentation is the Interactive Slideshow. The main question is how are film ratings within the Star Trek film series affected by the number of films rated? The user is being led through the changing of the ratings as the number of films increases.  There are 13 films in the series and 3 cohorts were chosen based on the number of films rated. The casuals cohort is defined as those who have rated 1-4 of the films in the series. The mediums and supers cohorts are defined as those who have rated 5-8 and 9-13 films respectively. Each cohort is given a unique color and the charts maintain those colors across the scenes. The basic chart remains the same with the axis and order of films remaining exact so that the user does not become disoriented.  Each scene has interactive elements such as the ability to filter based on the lead actor who played the captain in the film. This is something that is discussed a lot when people debate the best films in the series.
+</p><p>
+The scenes are meant to convey the average rating across the cohorts and to see what differences can be uncovered.  We begin with the casual cohort and highlight the best and worst films as rated by this cohort. This is followed by the medium and super cohorts in the same format. The final scene combines the average ratings into one grouped bar chart so that the user can explore.
+</p><p>
+Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings.
+</p><p>
+The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain.
+</p><p>
+The triggers are clearly labeled and effective alter the scenes. The slide identifiers change the slide and draw the appropriate charts and annotations and populate the tooltips. The captain filters also adjust the visual as expected.
+</p>
+
+</div>
+
 </body>
 </html>
