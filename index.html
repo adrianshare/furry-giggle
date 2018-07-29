@@ -1,0 +1,199 @@
+<html>
+<head> 
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+</head>
+<body>
+
+<button onclick="buildCasual()">1</button>
+<button onclick="buildMedium()">2</button>
+<button onclick="buildSuper()">3</button>
+<button onclick="buildAll()" >4</button>
+<button>Next</button>
+
+<div id="visual"></div>
+
+<script>
+
+var data = [];
+
+var casualCohort = [{title:'2009',rating: 3.931},{title: '2016', rating: 3.613}, {title: '1982', rating: 3.821},
+			{title:'1984',rating: 3.296},{title:'2013',rating: 3.746},{title:'1986',rating: 3.577},{title:'1989',rating: 2.859},
+			{title:'1991',rating: 3.341},{title:'1996',rating: 3.691},{title:'1994',rating: 3.297},{title:'1998',rating: 3.259},
+			{title:'2002',rating: 3.144},{title:'1979',rating: 3.115}
+			]			
+
+var mediumCohort = [{title:'2009',rating: 3.854},{title: '2016', rating: 3.574}, {title: '1982', rating: 3.472},
+			{title:'1984',rating: 3.059},{title:'2013',rating: 3.788},{title:'1986',rating: 3.240},{title:'1989',rating: 2.979},
+			{title:'1991',rating: 3.091},{title:'1996',rating: 3.620},{title:'1994',rating: 3.356},{title:'1998',rating: 3.135},
+			{title:'2002',rating: 3.100},{title:'1979',rating: 3.030}
+			]
+
+var superCohort = [{title:'2009',rating: 3.984},{title: '2016', rating: 3.496}, {title: '1982', rating: 3.987},
+			{title:'1984',rating: 3.367},{title:'2013',rating: 3.644},{title:'1986',rating: 3.700},{title:'1989',rating: 2.787},
+			{title:'1991',rating: 3.512},{title:'1996',rating: 3.806},{title:'1994',rating: 3.333},{title:'1998',rating: 3.216},
+			{title:'2002',rating: 3.153},{title:'1979',rating: 3.141}
+			]
+
+			
+var allCohort = [
+				{title:'2009',casuals: 3.931 ,mediums: 3.854, supers: 3.984},
+				{title:'2016',casuals: 3.613 ,mediums: 3.574, supers: 3.496}, 
+				{title:'1982',casuals: 3.821 ,mediums: 3.472, supers: 3.987},
+				{title:'1984',casuals: 3.296, mediums: 3.367, supers: 3.059},
+				{title:'2013',casuals: 3.746, mediums: 3.788, supers: 3.644},
+				{title:'1986',casuals: 3.577, mediums: 3.240, supers: 3.700},
+				{title:'1989',casuals: 2.859, mediums: 2.979, supers: 2.787},
+				{title:'1991',casuals: 3.341, mediums: 3.091, supers: 3.512},
+				{title:'1996',casuals: 3.691, mediums: 3.620, supers: 3.806},
+				{title:'1994',casuals: 3.297, mediums: 3.356, supers: 3.333},
+				{title:'1998',casuals: 3.259, mediums: 3.135, supers: 3.216 },
+				{title:'2002',casuals: 3.144, mediums: 3.100, supers: 3.153},
+				{title:'1979',casuals: 3.115, mediums: 3.030, supers: 3.141}
+			]
+
+var cohortNames = d3.keys(allCohort[0]).filter(function(key) {
+    return key !== "title";
+});
+
+allCohort.forEach(function(d) {
+    d.cohortRatings = cohortNames.map(function(name) {
+        return {
+            name: name,
+            value: d[name]
+        };
+    });
+});
+
+//console.log(allCohort)
+function buildCasual(){
+	d3.select("svg").remove();
+	data = casualCohort;
+	buildVisual(casualCohort, "#4c8aed");	
+}			
+function buildMedium(){
+	d3.select("svg").remove();
+    data = mediumCohort;
+	buildVisual(mediumCohort, "#ffa755");	
+}
+function buildSuper(){
+	d3.select("svg").remove();
+    data = superCohort;
+	buildVisual(superCohort, "#9fcc6f");	
+}
+function buildAll(){
+	d3.select("svg").remove();
+    data = allCohort;
+	buildGroupVisual(allCohort);	
+}
+
+
+var indent = 30;
+var w = 750;
+var h = 400;
+
+function buildVisual( data , color ){
+	var root = this;
+	var xScale = d3.scaleBand()
+					.domain(data.map(function(d) { return d.title; }))
+					.rangeRound([(indent),(w)]).padding(.1);
+
+					
+	var yScale = d3.scaleLinear()
+					.domain([0,4])
+					.range([h -30 ,100]);
+		
+	var yAxis = d3.axisLeft().scale(yScale)
+	var xAxis = d3.axisBottom().scale(xScale)
+				
+				
+	var svg = d3.select("#visual").append("svg").attr("width", w).attr("height", h)
+
+	svg.selectAll("rect").data(data).enter().append("rect")
+		.attr("width", 40)
+		.attr("height", function(d) {return  (h - indent) - yScale(d.rating);})
+		.attr("x", function(d,i) {return xScale(d.title);})
+		.attr("y", function(d) {return yScale(d.rating);} )
+		.style("fill", color)
+
+
+	svg.selectAll("text").data(data).enter().append("text")
+		.text(function(d){ return root.highlight(d.rating);})
+		.attr("x", function(d,i){return xScale(d.title); })
+		.attr("y", function(d) {return  yScale(d.rating);})
+
+
+	svg.append("g").call(yAxis)
+		.attr("transform", "translate("+ indent +", 0)")
+	svg.append("g").call(xAxis)
+		.attr("transform", "translate(0, "+ (h - indent) +")")
+	
+}
+
+function buildGroupVisual( data ){
+	var root = this;					
+	var yScale = d3.scaleLinear()
+					.domain([0,4])
+					.range([h -30 ,100]);
+	
+
+	var x0 = d3.scaleBand().rangeRound([indent, w]).padding(.1);
+	var x1 = d3.scaleBand().padding(.1);
+
+	x0.domain(data.map(function(d) { return d.title;}));
+	x1.domain(cohortNames).rangeRound([0, x0.bandwidth()]);
+	
+	var xAxis = d3.axisBottom().scale(x0)
+	var yAxis = d3.axisLeft().scale(yScale)
+
+	var color = d3.scaleOrdinal()
+					.range(["#4c8aed", "#ffa755", "#9fcc6f"]);
+				
+	var svg = d3.select("#visual").append("svg").attr("width", w).attr("height", h);
+
+	svg.append("g").selectAll("g").data(data).enter().append("g")
+		.attr("transform", function(d) { return "translate(" + x0(d.title) + ",0)"; })
+		.selectAll("rect").data(function(d) {return d.cohortRatings;}).enter().append("rect")
+		.attr("width", x1.bandwidth())
+		.attr("height", function(d) {return  (h - indent) - yScale(d.value);})
+		.attr("x", function(d,i) {return x1(d.name);})
+		.attr("y", function(d) {return yScale(d.value);} )
+		.style("fill", function(d) { 
+			return color(d.name);
+			
+		});
+/*
+	svg.selectAll("text").data(data).enter().append("text")
+		.text(function(d){ return root.highlight(d.rating);})
+		.attr("x", function(d,i){return xScale(d.title); })
+		.attr("y", function(d) {return  yScale(d.rating);})
+*/
+
+	svg.append("g").call(yAxis)
+		.attr("transform", "translate("+ indent +", 0)")
+	svg.append("g").call(xAxis)
+		.attr("transform", "translate(0, "+ (h - indent) +")")
+	
+}
+
+
+
+function highlight(rating){
+	var best = d3.max(data, function(d) { return d.rating;}) ;
+	var worst = d3.min(data, function(d) { return d.rating;}) ;
+	 
+	if (rating == best ){
+		return "Best"
+	}else if (rating == worst){
+		return "Worst"
+	}
+}
+
+
+
+
+
+</script>
+</body>
+</html>
