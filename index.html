@@ -5,17 +5,10 @@
 </head>
 <body>
 
-<div>
+<div align="center">
 	<h2>How are film ratings within the Star Trek film series affected by the number of films rated? </h2>
 </div>
-<div style="width: 750px ;">
-	<div id="navigaion" align="center">
-		<button style="" onclick="buildCombined()">Begin</button>
-		<button style="background-color: #4c8aed;" onclick="buildCasual()">1. Casual Fans</button>
-		<button style="background-color: #ffa755;" onclick="buildMedium()">2. Medium Fans</button>
-		<button style="background-color: #9fcc6f;" onclick="buildSuper()">3. Super Fans</button>
-		<button style="" onclick="buildAll()" >4. End</button>	
-	</div><br>
+<div align="center">
 	<div align="center"> 
 		<div id="captainParams" style=" visibility: hidden;">
 			Filter Movies by Lead Actor:
@@ -26,13 +19,24 @@
 			</form>
 		</div>
 	</div>
+	<div align="center" id="visual" ></div>
 
+	<br>
+	<div id="navigaion" align="center">
+		<button  onclick="buildCombined()">1. Combined</button>
+		<button  onclick="buildCasual()">2. Casuals</button>
+		<button  onclick="buildMedium()">3. Mediums </button>
+		<button  onclick="buildSuper()">4. Supers</button>
+		<button onclick="buildAll()" >5. Cohorts  </button>	
+		<button onclick="nextSlide()" >Next >>  </button>	
+	</div><br>
+	<div id="content" style="width: 750px"></div>
 </div>
 
-<div id="visual" ></div>
 
 
-<div id="content"></div>
+
+
 	
 <script>
 
@@ -87,8 +91,9 @@ function buildCombined(){
 	cleanUp()
 	currentSlide = 'combined';
 	buildVisual(allCohort, 'combined' ,"grey");
-	d3.select("#content").html(' Here we will establish a baseline of ratings among all film voters by listing the films from best to worst based on average rating. Will the best or worst film change based on the number of films voted on?');
+	d3.select("#content").html(' Here we will establish a baseline of ratings among all film voters by listing the films from best to worst based on the combined average rating. Will the best or worst film change based on the number of films voted on?');
 }
+
 
 function buildCasual(){
 	cleanUp()
@@ -185,16 +190,24 @@ function buildVisual( data ,cohort ,color , captain ){
 		.on("mouseout", function(){return tip.style("visibility", "hidden");});
 
 
-
-	svg.selectAll("text").data(data).enter().append("text")
-		.text(function(d){ return root.highlight(d[cohort]);})
+	//texts
+	var texts = svg.selectAll("text").data(data).enter()
+	
+	texts.append("text").text(function(d){ return root.highlight(d[cohort]);})
 		.attr("x", function(d,i){return xScale(d.series); })
 		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
 		.style("fill", "black")
+		.style("font-weight", "bold")
+	
+	texts.append("text").text(function(d){ return cohort + " avg. ratings";})
+		.attr("x", 300 )
+		.attr("y", 20)
+		.style("font", "20px arial, sans-serif")
+		.style("text-decoration", "underline")
 		
 	//tip bar
 	bars.append("rect")
-		.attr("width", 150)
+		.attr("width", 60)
 		.attr("height", 3)
 		.attr("x", function(d,i){return xScale(d.series); })
 		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
@@ -307,6 +320,12 @@ function buildGroupVisual( data , captain ){
 		.attr("x", function(d,i){return xScale(d.title); })
 		.attr("y", function(d) {return  yScale(d.rating);})
 */
+	svg.selectAll("text").data(data).enter().append("text")
+		.text(function(d){ return "cohort avg. ratings";})
+		.attr("x", 300 )
+		.attr("y", 20)
+		.style("font", "20px arial, sans-serif")
+		.style("text-decoration", "underline")
 
 	svg.append("g").call(yAxis)
 		.attr("transform", "translate("+ indent +", 0)")
@@ -342,9 +361,9 @@ function highlight(rating){
 	var worst = d3.min(allCohort, function(d) { return d[currentSlide];}) ;
 	 
 	if (rating == best ){
-		return  "Best" 
+		return  "Best!" 
 	}else if (rating == worst){
-		return "Worst"
+		return "Worst!"
 	}
 }
 
@@ -409,13 +428,40 @@ function viewAbout(){
 }
 
 
+buildCombined();
+
+function nextSlide(){
+	switch(currentSlide) {
+		case 'combined':
+			buildCasual();
+			break;
+		case 'casuals':
+			buildMedium();
+			break;
+		case 'mediums':
+			buildSuper();
+			break;
+		case 'supers':
+			buildAll();
+			break;
+		case 'final':
+			buildAll();
+			break;
+		default:
+			buildCombined();
+	}
+
+
+
+}
 
 
 </script>
+<br><br>
 <div>
 	<button onclick="viewAbout()">About the Visualization</button>
 </div>
-<div id ="about" >
+<div id ="about" style="visibility: hidden;" >
 
 
 <h1>About the Visualization:</h1>
@@ -427,7 +473,7 @@ The scenes are meant to convey the average rating across the cohorts and to see 
 </p><p>
 Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings with each film.
 </p><p>
-The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain.
+The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain. The captain filter is cleared between scenes
 </p><p>
 The triggers are clearly labeled and effective alter the scenes. The slide identifiers change the slide and draw the appropriate charts and annotations and populate the tooltips. The captain filters also adjust the visual as expected.
 </p>
