@@ -34,7 +34,7 @@
 			</form>
 		</div>
 	</div>
-	<div align="center" id="visual" ></div>
+	<div align="center" id="visual" ></div><br><br>
 	<button onclick="viewAbout()">About the Visualization</button><br><br>
 	<div id ="about" align="center"  style="width: 800px; visibility: hidden;" >
 		<h1>About the Visualization:</h1>
@@ -139,7 +139,7 @@ function buildAll(){
 }
 
 
-var indent = 30;
+var indent = 35;
 var w = 750;
 var h = 400;
 
@@ -221,6 +221,13 @@ function buildVisual( data ,cohort ,color , captain ){
 		.attr("y", 20)
 		.style("font", "20px arial, sans-serif")
 		.style("text-decoration", "underline")
+	  // text label for the y axis
+
+		
+	texts.append("text").text("Film Number in Series.")
+		.attr("x", 300 )
+		.attr("y", 400)
+		//.style("font", "10px arial, sans-serif")
 		
 	//tip bar
 	bars.append("rect")
@@ -337,12 +344,18 @@ function buildGroupVisual( data , captain ){
 		.attr("x", function(d,i){return xScale(d.title); })
 		.attr("y", function(d) {return  yScale(d.rating);})
 */
-	svg.selectAll("text").data(data).enter().append("text")
+	var texts = svg.selectAll("text").data(data).enter()
+	
+	texts.append("text")
 		.text(function(d){ return "cohort avg. ratings";})
 		.attr("x", 300 )
 		.attr("y", 20)
 		.style("font", "20px arial, sans-serif")
 		.style("text-decoration", "underline")
+	
+	texts.append("text").text("Film Number in Series.")
+		.attr("x", 300 )
+		.attr("y", 400)
 
 	svg.append("g").call(yAxis)
 		.attr("transform", "translate("+ indent +", 0)")
