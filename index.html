@@ -5,71 +5,66 @@
 </head>
 <body>
 
-<button onclick="viewAbout()">About the Visualization</button>
-<div id="navigaion">
-	<button onclick="buildCasual()">1</button>
-	<button onclick="buildMedium()">2</button>
-	<button onclick="buildSuper()">3</button>
-	<button onclick="buildAll()" >4</button>	
-<div>
+<div style="width: 750px ;">
+	<div id="navigaion" align="center">
+		<button onclick="buildCasual()">1. Casual Fans</button>
+		<button onclick="buildMedium()">2. Medium Fans</button>
+		<button onclick="buildSuper()">3. Super Fans</button>
+		<button onclick="buildAll()" >4. Group</button>	
+	</div><br>
+	<div align="center"> 
+		<div id="captainParams" style=" visibility: hidden;">
+			Filter Movies by Lead Actor:
+			<form id="captainsFRM">
+				<input type="radio" name="captainRDO" value="William Shatner">William Shatner
+				<input type="radio" name="captainRDO" value="Patrick Stewart">Patrick Stewart
+				<input type="radio" name="captainRDO" value="Chris Pine">Chris Pine
+			</form>
+		</div>
+	</div>
+
+</div>
 
 <div id="visual" ></div>
-<div id="captainParams" style="visibility: hidden">
-	<form id="captainsFRM">
-		<input type="radio" name="captainRDO" value="William Shatner">William Shatner
-		<input type="radio" name="captainRDO" value="Chris Pine">Chris Pine
-		<input type="radio" name="captainRDO" value="Patrick Stewart">Patrick Stewart
-	</form>
-</div>
+
 
 <div id="content"></div>
 	
-
-
 <script>
 
-
-
-var casualCohort = [{title:'2009',rating: 3.931},{title: '2016', rating: 3.613}, {title: '1982', rating: 3.821},
-			{title:'1984',rating: 3.296},{title:'2013',rating: 3.746},{title:'1986',rating: 3.577},{title:'1989',rating: 2.859},
-			{title:'1991',rating: 3.341},{title:'1996',rating: 3.691},{title:'1994',rating: 3.297},{title:'1998',rating: 3.259},
-			{title:'2002',rating: 3.144},{title:'1979',rating: 3.115}
-			]			
-
-var mediumCohort = [{title:'2009',rating: 3.854},{title: '2016', rating: 3.574}, {title: '1982', rating: 3.472},
-			{title:'1984',rating: 3.059},{title:'2013',rating: 3.788},{title:'1986',rating: 3.240},{title:'1989',rating: 2.979},
-			{title:'1991',rating: 3.091},{title:'1996',rating: 3.620},{title:'1994',rating: 3.356},{title:'1998',rating: 3.135},
-			{title:'2002',rating: 3.100},{title:'1979',rating: 3.030}
-			]
-
-var superCohort = [{title:'2009',rating: 3.984},{title: '2016', rating: 3.496}, {title: '1982', rating: 3.987},
-			{title:'1984',rating: 3.367},{title:'2013',rating: 3.644},{title:'1986',rating: 3.700},{title:'1989',rating: 2.787},
-			{title:'1991',rating: 3.512},{title:'1996',rating: 3.806},{title:'1994',rating: 3.333},{title:'1998',rating: 3.216},
-			{title:'2002',rating: 3.153},{title:'1979',rating: 3.141}
-			]
-
-			
+/*			
 var allCohort = [
-				{title:'2009',casuals: 3.931 ,mediums: 3.854, supers: 3.984, captain: 'Chris Pine'},
-				{title:'2016',casuals: 3.613 ,mediums: 3.574, supers: 3.496, captain: 'Chris Pine'}, 
-				{title:'1982',casuals: 3.821 ,mediums: 3.472, supers: 3.987, captain: 'William Shatner'},
-				{title:'1984',casuals: 3.296, mediums: 3.367, supers: 3.059, captain: 'William Shatner'},
-				{title:'2013',casuals: 3.746, mediums: 3.788, supers: 3.644, captain: 'Chris Pine'},
-				{title:'1986',casuals: 3.577, mediums: 3.240, supers: 3.700, captain: 'William Shatner'},
-				{title:'1989',casuals: 2.859, mediums: 2.979, supers: 2.787, captain: 'William Shatner'},
-				{title:'1991',casuals: 3.341, mediums: 3.091, supers: 3.512, captain: 'William Shatner'},
-				{title:'1996',casuals: 3.691, mediums: 3.620, supers: 3.806, captain: 'Patrick Stewart'},
-				{title:'1994',casuals: 3.297, mediums: 3.356, supers: 3.333, captain: 'Patrick Stewart'},
-				{title:'1998',casuals: 3.259, mediums: 3.135, supers: 3.216, captain: 'Patrick Stewart'},
-				{title:'2002',casuals: 3.144, mediums: 3.100, supers: 3.153, captain: 'Patrick Stewart'},
-				{title:'1979',casuals: 3.115, mediums: 3.030, supers: 3.141, captain: 'William Shatner'}
+				{year:'2009', series:' XI', title:'Star Trek',casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
+				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'}, 
+				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan',casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
+				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ',casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
+				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
+				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home ',casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
+				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier',casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},
+				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
+				{year:'1996', series:'VIII', title:'Star Trek: First Contact',casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
+				{year:'1994', series:'VII', title:'Star Trek: Generations',casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
+				{year:'1998', series:'IX', title:'Star Trek: Insurrection',casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
+				{year:'2002', series:'X', title:'Star Trek: Nemesis ',casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
+				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'}
 			]
 
-/*
-var cohortNames = d3.keys(allCohort[0]).filter(function(key) {
-    return key!== "title" ;
-});
-*/
+*/		
+var allCohort = [
+				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'},
+				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan',casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
+				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ',casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
+				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home ',casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
+				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier',casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},
+				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
+				{year:'1994', series:'VII', title:'Star Trek: Generations',casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
+				{year:'1996', series:'VIII', title:'Star Trek: First Contact',casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
+				{year:'1998', series:'IX', title:'Star Trek: Insurrection',casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
+				{year:'2002', series:'X', title:'Star Trek: Nemesis ',casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
+				{year:'2009', series:' XI', title:'Star Trek',casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
+				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
+				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'},
+			]
 var data = allCohort;
 var cohortNames = ['casuals', 'mediums', 'supers']
 
@@ -86,31 +81,28 @@ var currentSlide = 'open';
 
 function buildCasual(){
 	cleanUp()
-	data = casualCohort;
+	currentSlide = 'casuals';
 	buildVisual(allCohort, 'casuals' ,"#4c8aed");
-	currentSlide = 'casual';
 	d3.select("#content").html(' Casual viewers have seen 1-4 movies.');
 }			
 function buildMedium(){
 	cleanUp()
-    data = mediumCohort;
+	currentSlide = 'mediums';
 	buildVisual(allCohort, 'mediums', "#ffa755");
-	currentSlide = 'medium';
 	d3.select("#content").html(' Medium viewers have seen 5-8 movies.');
 	
 }
 function buildSuper(){
 	cleanUp()
-    data = superCohort;
-	buildVisual(allCohort, 'supers', "#9fcc6f");
-	currentSlide = 'super';	
+	currentSlide = 'supers';
+	buildVisual(allCohort, 'supers', "#9fcc6f");	
 	d3.select("#content").html('Super viewers have seen 9-13 movies.');
 }
 function buildAll(){
 	cleanUp()
-    data = allCohort;
+	currentSlide = 'final';	
 	buildGroupVisual(allCohort);
-	currentSlide = 'final';		
+		
 }
 
 
@@ -130,7 +122,7 @@ var tip = d3.select("body").append("div")
 function buildVisual( data ,cohort ,color , captain ){
 	var root = this;
 	var xScale = d3.scaleBand()
-					.domain(data.map(function(d) { return d.title; }))
+					.domain(data.map(function(d) { return d.series; }))
 					.rangeRound([(indent),(w)]).padding(.1);
 
 					
@@ -146,20 +138,12 @@ function buildVisual( data ,cohort ,color , captain ){
 
 	var bars = svg.selectAll("rect").data(data).enter()
 	
-
-	
-	/*
-	var mainColor = "grey";
-	if (!captain){
-		mainColor = color
-	}
-	*/
 	
 	//grey bars
 	bars.append("rect")
 		.attr("width", 40)
 		.attr("height", function(d) {return  (h - indent) - yScale(d[cohort]);})
-		.attr("x", function(d,i) {return xScale(d.title);})
+		.attr("x", function(d,i) {return xScale(d.series);})
 		.attr("y", function(d) {return yScale(d[cohort]);} )
 		.style("fill", "grey")
 		.style("opacity", 0.2)
@@ -175,13 +159,13 @@ function buildVisual( data ,cohort ,color , captain ){
 			})
 		.attr("width", 40)
 		.attr("height", function(d) {return  (h - indent) - yScale(d[cohort]);})
-		.attr("x", function(d,i) {return xScale(d.title);})
+		.attr("x", function(d,i) {return xScale(d.series);})
 		.attr("y", function(d) {return yScale(d[cohort]);} )
 		.style("fill", color )
 		.on("mouseover", function(d) 
 						{	
 						return tip.style("visibility", "visible")
-								.html('<span>Title: Star Trek '+ d.title +
+								.html('<span>Title: '+ d.title +
 								'</span><br><span>Rating: '+ d[cohort]  +
 								'</span><br><span>Captain: '+ d.captain +'</span>' );	
 						
@@ -193,7 +177,7 @@ function buildVisual( data ,cohort ,color , captain ){
 
 	svg.selectAll("text").data(data).enter().append("text")
 		.text(function(d){ return root.highlight(d[cohort]);})
-		.attr("x", function(d,i){return xScale(d.title); })
+		.attr("x", function(d,i){return xScale(d.series); })
 		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
 		.style("fill", "black")
 		
@@ -201,7 +185,7 @@ function buildVisual( data ,cohort ,color , captain ){
 	bars.append("rect")
 		.attr("width", 150)
 		.attr("height", 3)
-		.attr("x", function(d,i){return xScale(d.title); })
+		.attr("x", function(d,i){return xScale(d.series); })
 		.attr("y", function(d) {return  yScale(d[cohort]) - 80 ;})
 		.attr("fill", "black")
 		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})	
@@ -212,9 +196,9 @@ function buildVisual( data ,cohort ,color , captain ){
 	lines.append("line")          
 		.style("stroke", "black")
 		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})		
-		.attr("x1", function(d,i){return xScale(d.title);})     
+		.attr("x1", function(d,i){return xScale(d.series);})     
 		.attr("y1",  function(d) {return  yScale(d[cohort]) - 80 ;})     
-		.attr("x2", function(d,i){return xScale(d.title) + 20;})    
+		.attr("x2", function(d,i){return xScale(d.series) + 20;})    
 		.attr("y2",  function(d) {return  yScale(d[cohort]) + 10 ;});
 		
 	//tip dots	
@@ -223,7 +207,7 @@ function buildVisual( data ,cohort ,color , captain ){
 	circles.append("circle")        
 		.style("stroke", "black")	
 		.style("opacity", function(d){ return root.fillOpacity(d[cohort]);})	
-		.attr("cx", function(d,i){return xScale(d.title) + 20;})     
+		.attr("cx", function(d,i){return xScale(d.series) + 20;})     
 		.attr("cy",  function(d) {return  yScale(d[cohort]) + 10  ;})     
 		.attr("r",  8)
 		   
@@ -231,13 +215,15 @@ function buildVisual( data ,cohort ,color , captain ){
 	
 	svg.append("g").call(yAxis)
 		.attr("transform", "translate("+ indent +", 0)")
+		.selectAll("text")
+		.style("font-size", "16px")
 	svg.append("g").call(xAxis)
-		.attr("transform", "translate(0, "+ (h - indent) +")")
-		//.selectAll("text")
+		.attr("transform", "translate(0, "+ (h - indent ) +")")
+		.selectAll("text")
+		.style("font-size", "16px")
 		//.attr("y", 0)
-		//.attr("x", 9)
-		//.attr("dy", ".5em")
-		//.attr("transform", "rotate(-90)")
+		//.attr("x", -35)
+		//.attr("transform", "rotate(-60)")
 		//.style("text-anchor", "start");
 		
 	
@@ -253,7 +239,7 @@ function buildGroupVisual( data , captain ){
 	var x0 = d3.scaleBand().rangeRound([indent, w]).padding(.1);
 	var x1 = d3.scaleBand().padding(.1);
 
-	x0.domain(data.map(function(d) { return d.title;}));
+	x0.domain(data.map(function(d) { return d.series;}));
 	x1.domain(cohortNames).rangeRound([0, x0.bandwidth()]);
 	
 	var xAxis = d3.axisBottom().scale(x0)
@@ -266,7 +252,7 @@ function buildGroupVisual( data , captain ){
 	
 	//fill grey
 	svg.append("g").selectAll("g").data(data).enter().append("g")
-		.attr("transform", function(d) { return "translate(" + x0(d.title) + ",0)"; })
+		.attr("transform", function(d) { return "translate(" + x0(d.series) + ",0)"; })
 	
 		.selectAll("rect").data(function(d) {return d.cohortRatings;}).enter().append("rect")
 		.attr("width", x1.bandwidth())
@@ -286,11 +272,11 @@ function buildGroupVisual( data , captain ){
 				return true;
 			}	
 		})
-		.attr("transform", function(d) { return "translate(" + x0(d.title) + ",0)"; })
+		.attr("transform", function(d) { return "translate(" + x0(d.series) + ",0)"; })
 		.on("mouseover", function(d) 
 						{	
 						return tip.style("visibility", "visible")
-								.html('<span>Title: Star Trek '+ d.title +
+								.html('<span>Title: '+ d.title +
 								'</span><br><span>Casuals: '+ d['casuals'] +
 								'</span><br><span>Medium: '+ d['mediums'] +
 								'</span><br><span>Supers: '+ d['supers'] +
@@ -313,8 +299,12 @@ function buildGroupVisual( data , captain ){
 
 	svg.append("g").call(yAxis)
 		.attr("transform", "translate("+ indent +", 0)")
+		.selectAll("text")
+		.style("font-size", "16px")
 	svg.append("g").call(xAxis)
 		.attr("transform", "translate(0, "+ (h - indent) +")")
+		.selectAll("text")
+		.style("font-size", "16px")
 		
 	var cohortLegend = svg.append("g").selectAll("g").data(cohortNames).enter()
 					.append("g")
@@ -337,8 +327,8 @@ function buildGroupVisual( data , captain ){
 
 
 function highlight(rating){
-	var best = d3.max(data, function(d) { return d.rating;}) ;
-	var worst = d3.min(data, function(d) { return d.rating;}) ;
+	var best = d3.max(allCohort, function(d) { return d[currentSlide];}) ;
+	var worst = d3.min(allCohort, function(d) { return d[currentSlide];}) ;
 	 
 	if (rating == best ){
 		return  "Best" 
@@ -348,8 +338,8 @@ function highlight(rating){
 }
 
 function fillOpacity(rating){
-	var best = d3.max(data, function(d) { return d.rating;}) ;
-	var worst = d3.min(data, function(d) { return d.rating;}) ;
+	var best = d3.max(allCohort, function(d) { return d[currentSlide];}) ;
+	var worst = d3.min(allCohort, function(d) { return d[currentSlide];}) ;
 	 
 	if (rating == best ){
 		return  0.5 
@@ -364,13 +354,13 @@ function captainFilter(){
 	var captainName = d3.select('input[name="captainRDO"]:checked').node().value
 	d3.select("svg").remove();
 	switch(currentSlide) {
-		case 'casual':
+		case 'casuals':
 			buildVisual(allCohort, 'casuals' ,"#4c8aed", captainName);
 			break;
-		case 'medium':
+		case 'mediums':
 			buildVisual(allCohort, 'mediums', "#ffa755", captainName);
 			break;
-		case 'super':
+		case 'supers':
 			buildVisual(allCohort, 'supers', "#9fcc6f", captainName);
 			break;
 		case 'final':
@@ -408,7 +398,9 @@ function viewAbout(){
 
 
 </script>
-
+<div>
+	<button onclick="viewAbout()">About the Visualization</button>
+</div>
 <div id ="about" >
 <h2>About the Visualization:</h2>
 <p>
