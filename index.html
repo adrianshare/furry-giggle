@@ -5,8 +5,23 @@
 </head>
 <body>
 
-<div align="center">
+<div align="center" >
 	<h2>How are film ratings within the Star Trek film series affected by the number of films rated? </h2>
+	<div id="content" style="width: 750px"></div><br>
+	<div >
+		<div id="navigaion" align="center">
+		<button  onclick="buildCombined()">1. Combined</button>
+		<button  onclick="buildCasual()">2. Casuals</button>
+		<button  onclick="buildMedium()">3. Mediums </button>
+		<button  onclick="buildSuper()">4. Supers</button>
+		<button onclick="buildAll()" >5. Cohorts  </button>	
+		<button onclick="nextSlide()" >Next >>  </button>	
+	</div><br>
+	<br>
+	<div style="width:750px; height:2px; background-color: grey;"></div>
+
+</div>
+<br>
 </div>
 <div align="center">
 	<div align="center"> 
@@ -20,17 +35,27 @@
 		</div>
 	</div>
 	<div align="center" id="visual" ></div>
+	<button onclick="viewAbout()">About the Visualization</button><br><br>
+	<div id ="about" align="center"  style="width: 800px; visibility: hidden;" >
+		<h1>About the Visualization:</h1>
 
-	<br>
-	<div id="navigaion" align="center">
-		<button  onclick="buildCombined()">1. Combined</button>
-		<button  onclick="buildCasual()">2. Casuals</button>
-		<button  onclick="buildMedium()">3. Mediums </button>
-		<button  onclick="buildSuper()">4. Supers</button>
-		<button onclick="buildAll()" >5. Cohorts  </button>	
-		<button onclick="nextSlide()" >Next >>  </button>	
-	</div><br>
-	<div id="content" style="width: 750px"></div>
+		<p>
+		The main hybrid structured followed in this visual presentation is the Interactive Slideshow. The main question is how are film ratings within the Star Trek film series affected by the number of films rated? The user is being led through the changing of the ratings as the number of films rated increases.  There are 13 films in the series and 3 cohorts were chosen based on the number of films rated. The casuals cohort is defined as those who have rated 1-4 of the films in the series. The mediums and supers cohorts are defined as those who have rated 5-8 and 9-13 films respectively. Each cohort is given a unique color and the charts maintain those colors across the scenes. The basic chart remains the same with the axis and order of films remaining exact so that the user does not become disoriented.  Each scene has interactive elements such as the ability to filter based on the lead actor who played the captain in the film. This is something that is discussed a lot when people debate the best films in the series.
+		</p><p>
+		The scenes are meant to convey the average rating across the cohorts and to see what differences can be uncovered.  We begin with the combined average rating of all ratings to establish a baseline for the best and worst films in the series. Position of the films is maintained throughout the scene transitions to help highlight the differences. The casual cohort is the first cohort presented and the best and worst films as rated by this cohort are highlighted.. This is followed by the medium and super cohorts in the same format. The final scene combines the average ratings into one grouped bar chart so that the user can further explore the differences film by film.
+		</p><p>
+		Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings with each film.
+		</p><p>
+		The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain. The captain filter is cleared between scenes
+		</p><p>
+		The triggers are clearly labeled and effective alter the scenes. The slide identifiers change the slide and draw the appropriate charts and annotations and populate the tooltips. The captain filters also adjust the visual as expected.
+		</p>
+
+		Data source: 
+		https://grouplens.org/datasets/movielens/ <br>
+		*166,687 Star Trek ratings
+	</div>
+	<br>	
 </div>
 
 
@@ -90,7 +115,7 @@ var currentSlide = 'open';
 function buildCombined(){
 	cleanUp()
 	currentSlide = 'combined';
-	buildVisual(allCohort, 'combined' ,"grey");
+	buildVisual(allCohort, 'combined' ,"#FFD761");
 	d3.select("#content").html(' Here we will establish a baseline of ratings among all film voters by listing the films from best to worst based on the combined average rating. Will the best or worst film change based on the number of films voted on?');
 }
 
@@ -457,31 +482,7 @@ function nextSlide(){
 
 
 </script>
-<br><br>
-<div>
-	<button onclick="viewAbout()">About the Visualization</button>
-</div>
-<div id ="about" style="visibility: hidden;" >
 
-
-<h1>About the Visualization:</h1>
-
-<p>
-The main hybrid structured followed in this visual presentation is the Interactive Slideshow. The main question is how are film ratings within the Star Trek film series affected by the number of films rated? The user is being led through the changing of the ratings as the number of films rated increases.  There are 13 films in the series and 3 cohorts were chosen based on the number of films rated. The casuals cohort is defined as those who have rated 1-4 of the films in the series. The mediums and supers cohorts are defined as those who have rated 5-8 and 9-13 films respectively. Each cohort is given a unique color and the charts maintain those colors across the scenes. The basic chart remains the same with the axis and order of films remaining exact so that the user does not become disoriented.  Each scene has interactive elements such as the ability to filter based on the lead actor who played the captain in the film. This is something that is discussed a lot when people debate the best films in the series.
-</p><p>
-The scenes are meant to convey the average rating across the cohorts and to see what differences can be uncovered.  We begin with the combined average rating of all ratings to establish a baseline for the best and worst films in the series. Position of the films is maintained throughout the scene transitions to help highlight the differences. The casual cohort is the first cohort presented and the best and worst films as rated by this cohort are highlighted.. This is followed by the medium and super cohorts in the same format. The final scene combines the average ratings into one grouped bar chart so that the user can further explore the differences film by film.
-</p><p>
-Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings with each film.
-</p><p>
-The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain. The captain filter is cleared between scenes
-</p><p>
-The triggers are clearly labeled and effective alter the scenes. The slide identifiers change the slide and draw the appropriate charts and annotations and populate the tooltips. The captain filters also adjust the visual as expected.
-</p>
-
-Data source: 
-https://grouplens.org/datasets/movielens/ <br>
-*166,687 Star Trek ratings
-</div>
 
 </body>
 </html>
