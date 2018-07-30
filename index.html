@@ -5,12 +5,16 @@
 </head>
 <body>
 
+<div>
+	<h2>How are film ratings within the Star Trek film series affected by the number of films rated? </h2>
+</div>
 <div style="width: 750px ;">
 	<div id="navigaion" align="center">
-		<button onclick="buildCasual()">1. Casual Fans</button>
-		<button onclick="buildMedium()">2. Medium Fans</button>
-		<button onclick="buildSuper()">3. Super Fans</button>
-		<button onclick="buildAll()" >4. Group</button>	
+		<button style="" onclick="buildCombined()">Begin</button>
+		<button style="background-color: #4c8aed;" onclick="buildCasual()">1. Casual Fans</button>
+		<button style="background-color: #ffa755;" onclick="buildMedium()">2. Medium Fans</button>
+		<button style="background-color: #9fcc6f;" onclick="buildSuper()">3. Super Fans</button>
+		<button style="" onclick="buildAll()" >4. End</button>	
 	</div><br>
 	<div align="center"> 
 		<div id="captainParams" style=" visibility: hidden;">
@@ -32,38 +36,38 @@
 	
 <script>
 
-/*			
+/*
 var allCohort = [
-				{year:'2009', series:' XI', title:'Star Trek',casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
-				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'}, 
-				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan',casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
-				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ',casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
-				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
-				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home ',casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
-				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier',casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},
-				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
-				{year:'1996', series:'VIII', title:'Star Trek: First Contact',casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
-				{year:'1994', series:'VII', title:'Star Trek: Generations',casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
-				{year:'1998', series:'IX', title:'Star Trek: Insurrection',casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
-				{year:'2002', series:'X', title:'Star Trek: Nemesis ',casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
-				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'}
-			]
+				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',combined: 3.091 , casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'},
+				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan', combined: 3.684 ,casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
+				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ', combined: 3.233 ,casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
+				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home', combined: 3.459 ,casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
+				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier', combined: 2.869 ,casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},
+				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',combined: 3.296, casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
+				{year:'1994', series:'VII', title:'Star Trek: Generations', combined: 3.344 ,casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
+				{year:'1996', series:'VIII', title:'Star Trek: First Contact', combined: 3.666,casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
+				{year:'1998', series:'IX', title:'Star Trek: Insurrection', combined: 3.191 ,casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
+				{year:'2002', series:'X', title:'Star Trek: Nemesis', combined: 3.135, casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
+				{year:'2009', series:' XI', title:'Star Trek', combined: 3.872,casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
+				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',combined: 3.766 ,casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
+				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',combined: 3.564 ,casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'},
+			]	
 
-*/		
-var allCohort = [
-				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'},
-				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan',casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
-				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ',casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
-				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home ',casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
-				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier',casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},
-				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
-				{year:'1994', series:'VII', title:'Star Trek: Generations',casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
-				{year:'1996', series:'VIII', title:'Star Trek: First Contact',casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
-				{year:'1998', series:'IX', title:'Star Trek: Insurrection',casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
-				{year:'2002', series:'X', title:'Star Trek: Nemesis ',casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
-				{year:'2009', series:' XI', title:'Star Trek',casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
-				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
-				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'},
+*/	
+var allCohort = [				
+				{year:'2009', series:' XI', title:'Star Trek', combined: 3.872,casuals: 3.854 ,mediums: 3.931, supers: 3.984, captain: 'Chris Pine'},
+				{year:'2013', series:'XII', title:'Star Trek: Into Darkness',combined: 3.766 ,casuals: 3.788, mediums: 3.746, supers: 3.644, captain: 'Chris Pine'},
+				{year:'1982', series:'II', title:'Star Trek II: The Wrath of Khan', combined: 3.684 ,casuals: 3.472 ,mediums: 3.821, supers: 3.987, captain: 'William Shatner'},
+				{year:'1996', series:'VIII', title:'Star Trek: First Contact', combined: 3.666,casuals: 3.620, mediums: 3.691 , supers: 3.806, captain: 'Patrick Stewart'},
+				{year:'2016', series:'XIII', title:'Star Trek: Beyond ',combined: 3.564 ,casuals: 3.574 ,mediums: 3.613, supers: 3.496, captain: 'Chris Pine'},
+				{year:'1986', series:'IV', title:'Star Trek IV: The Voyage Home', combined: 3.459 ,casuals: 3.240,  mediums: 3.577, supers: 3.700, captain: 'William Shatner'},
+				{year:'1994', series:'VII', title:'Star Trek: Generations', combined: 3.344 ,casuals: 3.356 , mediums: 3.297, supers: 3.333, captain: 'Patrick Stewart'},
+				{year:'1991', series:'VI', title:'Star Trek VI: The Undiscovered Country',combined: 3.296, casuals:3.091 , mediums: 3.341, supers: 3.512, captain: 'William Shatner'},
+				{year:'1984', series:'III', title:'Star Trek III: The Search for Spock ', combined: 3.233 ,casuals:3.059 , mediums: 3.296, supers: 3.367, captain: 'William Shatner'},
+				{year:'1998', series:'IX', title:'Star Trek: Insurrection', combined: 3.191 ,casuals:3.135 , mediums: 3.259, supers: 3.216, captain: 'Patrick Stewart'},
+				{year:'2002', series:'X', title:'Star Trek: Nemesis', combined: 3.135, casuals:3.100 , mediums: 3.144, supers: 3.153, captain: 'Patrick Stewart'},
+				{year:'1979', series:'I', title:'Star Trek: The Motion Picture ',combined: 3.091 , casuals:3.030 , mediums: 3.115, supers: 3.141, captain: 'William Shatner'},
+				{year:'1989', series:'V', title:'Star Trek V: The Final Frontier', combined: 2.869 ,casuals:2.979 , mediums: 2.859, supers: 2.787, captain: 'William Shatner'},			
 			]
 var data = allCohort;
 var cohortNames = ['casuals', 'mediums', 'supers']
@@ -79,30 +83,37 @@ allCohort.forEach(function(d) {
 
 var currentSlide = 'open';
 
+function buildCombined(){
+	cleanUp()
+	currentSlide = 'combined';
+	buildVisual(allCohort, 'combined' ,"grey");
+	d3.select("#content").html(' Here we will establish a baseline of ratings among all film voters by listing the films from best to worst based on average rating. Will the best or worst film change based on the number of films voted on?');
+}
+
 function buildCasual(){
 	cleanUp()
 	currentSlide = 'casuals';
 	buildVisual(allCohort, 'casuals' ,"#4c8aed");
-	d3.select("#content").html(' Casual viewers have seen 1-4 movies.');
+	d3.select("#content").html(' Casual voters have seen 1-4 movies. The best and the worst film in the series remains the same but a number of films shift places. This includes Star Trek II: The Wrath of Khan which has fallen  two spots with the casual cohort.');
 }			
 function buildMedium(){
 	cleanUp()
 	currentSlide = 'mediums';
 	buildVisual(allCohort, 'mediums', "#ffa755");
-	d3.select("#content").html(' Medium viewers have seen 5-8 movies.');
+	d3.select("#content").html(' Medium voters have seen 5-8 movies. The best and worst film remain the same but Star Trek II: The Wrath of Khan is now the second best film.');
 	
 }
 function buildSuper(){
 	cleanUp()
 	currentSlide = 'supers';
 	buildVisual(allCohort, 'supers', "#9fcc6f");	
-	d3.select("#content").html('Super viewers have seen 9-13 movies.');
+	d3.select("#content").html('Super viewers have seen 9-13 movies.Star Trek II: The Wrath of Khan is now the best rated film. Star Trek IV: The Voyage Home has also jumped two spots.');
 }
 function buildAll(){
 	cleanUp()
 	currentSlide = 'final';	
 	buildGroupVisual(allCohort);
-		
+	d3.select("#content").html('The number of films voted on does affect the film ratings and can change the order of the film rankings. Here we can compare individual films ratings by each cohort.	')
 }
 
 
@@ -354,6 +365,9 @@ function captainFilter(){
 	var captainName = d3.select('input[name="captainRDO"]:checked').node().value
 	d3.select("svg").remove();
 	switch(currentSlide) {
+		case 'combined':
+			buildVisual(allCohort, 'combined' ,"grey", captainName);
+			break;
 		case 'casuals':
 			buildVisual(allCohort, 'casuals' ,"#4c8aed", captainName);
 			break;
@@ -402,19 +416,25 @@ function viewAbout(){
 	<button onclick="viewAbout()">About the Visualization</button>
 </div>
 <div id ="about" >
-<h2>About the Visualization:</h2>
+
+
+<h1>About the Visualization:</h1>
+
 <p>
-The main hybrid structured followed in this visual presentation is the Interactive Slideshow. The main question is how are film ratings within the Star Trek film series affected by the number of films rated? The user is being led through the changing of the ratings as the number of films increases.  There are 13 films in the series and 3 cohorts were chosen based on the number of films rated. The casuals cohort is defined as those who have rated 1-4 of the films in the series. The mediums and supers cohorts are defined as those who have rated 5-8 and 9-13 films respectively. Each cohort is given a unique color and the charts maintain those colors across the scenes. The basic chart remains the same with the axis and order of films remaining exact so that the user does not become disoriented.  Each scene has interactive elements such as the ability to filter based on the lead actor who played the captain in the film. This is something that is discussed a lot when people debate the best films in the series.
+The main hybrid structured followed in this visual presentation is the Interactive Slideshow. The main question is how are film ratings within the Star Trek film series affected by the number of films rated? The user is being led through the changing of the ratings as the number of films rated increases.  There are 13 films in the series and 3 cohorts were chosen based on the number of films rated. The casuals cohort is defined as those who have rated 1-4 of the films in the series. The mediums and supers cohorts are defined as those who have rated 5-8 and 9-13 films respectively. Each cohort is given a unique color and the charts maintain those colors across the scenes. The basic chart remains the same with the axis and order of films remaining exact so that the user does not become disoriented.  Each scene has interactive elements such as the ability to filter based on the lead actor who played the captain in the film. This is something that is discussed a lot when people debate the best films in the series.
 </p><p>
-The scenes are meant to convey the average rating across the cohorts and to see what differences can be uncovered.  We begin with the casual cohort and highlight the best and worst films as rated by this cohort. This is followed by the medium and super cohorts in the same format. The final scene combines the average ratings into one grouped bar chart so that the user can explore.
+The scenes are meant to convey the average rating across the cohorts and to see what differences can be uncovered.  We begin with the combined average rating of all ratings to establish a baseline for the best and worst films in the series. Position of the films is maintained throughout the scene transitions to help highlight the differences. The casual cohort is the first cohort presented and the best and worst films as rated by this cohort are highlighted.. This is followed by the medium and super cohorts in the same format. The final scene combines the average ratings into one grouped bar chart so that the user can further explore the differences film by film.
 </p><p>
-Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings.
+Annotations are used to call out the best and worst films in the series within the cohorts. The 3 cohort slides have the annotations clearly attached to the appropriate films and the shift of the best film can be seen as you move from mediums to supers. The final chart doesn't have the best and worst film annotated on purpose as the user is encouraged to discover other changes in the average ratings with each film.
 </p><p>
 The main parameters are the cohort filters that are used to create the bar charts. The user is also able to filter based on the lead actor who plays the captain.
 </p><p>
 The triggers are clearly labeled and effective alter the scenes. The slide identifiers change the slide and draw the appropriate charts and annotations and populate the tooltips. The captain filters also adjust the visual as expected.
 </p>
 
+Data source: 
+https://grouplens.org/datasets/movielens/ <br>
+*166,687 Star Trek ratings
 </div>
 
 </body>
